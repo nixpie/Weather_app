@@ -13,12 +13,25 @@ api_key = config['api_key']['key']
 def get_weather(city):
     result = requests.get(url.format(city, api_key))
     if result:
-        print(result.content)
+        json = result.json()
+        # (City, COuntry, temp_celsius, temp_fahrenheit, icon, weather)
+        city = json['name']
+        country = json['sys']['country']
+        temp_kelvin = json['main']['temp']
+        temp_celsius = temp_kelvin - 273.15
+        temp_fahrenheit = (temp_kelvin - 273.15) * 9 / 5 + 32
+        icon = json['weather'][0]['icon']
+        weather = json['weather'][0]['main']
+        final = (city, country, temp_celsius, temp_fahrenheit, icon, weather)
+        return final
+
+
+
     else:
         return None
 
 
-get_weather('London')
+print(get_weather('New York'))
 
 def search():
     pass
